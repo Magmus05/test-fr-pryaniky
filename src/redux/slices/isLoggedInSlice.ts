@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isLoggedIn: false,
-  openModal: false,
+
 };
 
 const isLoggedInSlice = createSlice({
@@ -17,13 +17,11 @@ const isLoggedInSlice = createSlice({
       state.isLoggedIn = action.payload;
       localStorage.removeItem("token");
     },
-    setOpenModal: (state, action) => {
-      state.openModal = action.payload;
-    },
+
   },
 });
 
-export const { setIsLoggedIn, setLogOut, setOpenModal } =
+export const { setIsLoggedIn, setLogOut} =
   isLoggedInSlice.actions;
 
 export default isLoggedInSlice.reducer;

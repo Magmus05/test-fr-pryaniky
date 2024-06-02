@@ -1,3 +1,4 @@
+// import axios from "axios";
 import {IAddData} from "../types/types"
 
 const host = "https://test.v5.pryaniky.com";
@@ -44,3 +45,4 @@ export const addData = ({token, data}:IAddData) => {
     });
   }
 };
+

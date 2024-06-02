@@ -4,9 +4,10 @@ import dataSlice from "./slices/dataSlice";
 import infoTooltip from "./slices/infoTooltipSlice";
 import { useDispatch, useSelector } from "react-redux";
 import isLoggedInSlice from "./slices/isLoggedInSlice";
+import openModalSlice from "./slices/openModalSlice";
 
 export const store = configureStore({
-  reducer: { dataSlice, infoTooltip, isLoggedInSlice },
+  reducer: { dataSlice, infoTooltip, isLoggedInSlice, openModalSlice },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

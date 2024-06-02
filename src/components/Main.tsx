@@ -10,12 +10,15 @@ import Paper from "@mui/material/Paper";
 import { useAppSelector, useAppDispatch } from "../redux/srore";
 import { SkeletonTable } from "./SkeletonTable";
 import { Box, Button, IconButton, Typography } from "@mui/material";
-import { setLogOut, setOpenModal } from "../redux/slices/isLoggedInSlice";
+import { setLogOut} from "../redux/slices/isLoggedInSlice";
+import { setOpenModal } from "../redux/slices/openModalSlice";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { setDeleteItemData } from "../redux/slices/dataSlice";
 import AddIcon from "@mui/icons-material/Add";
 import { styled } from "@mui/system";
 import { ModalPopup } from "./ModalPopup";
+import { FormForAddItem } from "./FormForAddItem";
+import EditIcon from "@mui/icons-material/Edit";
 
 const RoundButton = styled(Button)({
   borderRadius: "50%",
@@ -32,7 +35,6 @@ export const Main: React.FC = () => {
   const dispath = useAppDispatch();
   const navigate = useNavigate();
   console.log(data);
-
 
   return (
     <>
@@ -64,15 +66,40 @@ export const Main: React.FC = () => {
 
                 {data.map((cell, i) => (
                   <TableCell key={i} align="right">
-                    <IconButton
-                      aria-label="delete"
-                      size="small"
-                      color="primary"
-                      onClick={() => dispath(setDeleteItemData(cell.id))}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent:"space-between"
+                      }}
                     >
-                      <DeleteIcon />
-                    </IconButton>
-                    {cell.id}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                        }}
+                      >
+                        <IconButton
+                          aria-label="delete"
+                          size="small"
+                          color="primary"
+                          onClick={() => dispath(setDeleteItemData(cell.id))}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                        <IconButton
+                          color="primary"
+                          aria-label="редактировать"
+                          size="small"
+                          onClick={() => console.log("vvvv")}
+                         
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </Box>
+                      {cell.id}
+                    </Box>
                   </TableCell>
                 ))}
               </TableRow>
@@ -143,7 +170,9 @@ export const Main: React.FC = () => {
                 <TableRow
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell color="primary" align="center">employeeSigDate</TableCell>
+                  <TableCell color="primary" align="center">
+                    employeeSigDate
+                  </TableCell>
                   {data.map((cell, i) => (
                     <TableCell key={i} align="right">
                       {cell.employeeSigDate}
@@ -166,13 +195,23 @@ export const Main: React.FC = () => {
         </TableContainer>
       )}
 
-      <Box padding={1} display={"flex"} justifyContent={"start"} alignItems={"center"} gap={0.5}>
+      <Box
+        padding={1}
+        display={"flex"}
+        justifyContent={"start"}
+        alignItems={"center"}
+        gap={0.5}
+      >
         Добавить документ
-        <RoundButton variant="contained" color="primary" onClick={()=>dispath(setOpenModal(true))}>
+        <RoundButton
+          variant="contained"
+          color="primary"
+          onClick={() => dispath(setOpenModal(true))}
+        >
           <AddIcon />
         </RoundButton>
       </Box>
-      <ModalPopup ></ModalPopup>
+      <ModalPopup element={<FormForAddItem />}></ModalPopup>
     </>
   );
 };

@@ -7,11 +7,11 @@ export interface IData {
 	employeeNumber:string,
 	employeeSigDate:string,
 	employeeSignatureName:string,
-	id:string,
+	id?:string,
 }
 export interface IAddData {
-  token: string | null,
-  data: IData[]
+  token: string,
+  data: IData
 }
 
 export interface IinfotooltipSlice {

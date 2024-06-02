@@ -5,27 +5,34 @@ import { LoginPage } from "./pages/LoginPage";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Main } from "./components/Main";
 import { auth, getData } from "./utils/MainApi";
-import { setData } from "./redux/slices/dataSlice";
+import { setData, setToken } from "./redux/slices/dataSlice";
 import { setIsLoggedIn } from "./redux/slices/isLoggedInSlice";
 import { useAppDispatch, useAppSelector } from "./redux/srore";
+import NotificationContainer from "./components/NotificationContainer";
+import createToast from "./hooks/createToast";
+createToast
 
 function App() {
-  const [token, setToken] = React.useState<string | null>("");
+
   const navigate = useNavigate();
   const dispath = useAppDispatch();
   const isLoggedIn = useAppSelector(
     (state) => state.isLoggedInSlice.isLoggedIn
+  );
+  const token = useAppSelector(
+    (state) => state.dataSlice.token
   );
 
   React.useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (token) {
-      setToken(token);
+      dispath(setToken(token));
       dispath(setIsLoggedIn(true));
 
       getData(token)
         .then((res) => {
+
           return res.json();
         })
         .then((res) => {
@@ -35,8 +42,9 @@ function App() {
         .finally(() => {
           // setLoading(false);
         });
+        
     }
-  }, [isLoggedIn]);
+  }, [dispath, isLoggedIn]);
 
   const handleLogin = (userName: string, password: string) => {
     console.log(userName, password);
@@ -48,25 +56,33 @@ function App() {
       .then((res) => {
         console.log(res.data.token);
         dispath(setIsLoggedIn(true));
-        setToken(res.data.token);
+        dispath(setToken(res.data.token))
         localStorage.setItem("token", res.data.token);
         navigate("/", { replace: true });
+        createToast("success", "Вы успешно залогинилось")
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        createToast("error", `Произошла ошибка: ${err.message}`)
+        console.log(err)
+      
+      });
   };
 
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={token && <ProtectedRoute element={<Main />} />}
-      />
+    <>
+      <Routes>
+        <Route
+          path="/"
+          element={token && <ProtectedRoute element={<Main />} />}
+        />
 
-      <Route
-        path="/sign-in"
-        element={<LoginPage handleLogin={handleLogin} />}
-      />
-    </Routes>
+        <Route
+          path="/sign-in"
+          element={<LoginPage handleLogin={handleLogin} />}
+        />
+      </Routes>
+      <NotificationContainer />
+    </>
   );
 }
 
