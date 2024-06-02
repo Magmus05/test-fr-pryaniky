@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useAppSelector, useAppDispatch } from "../redux/srore";
 import { setOpenModal } from "../redux/slices/openModalSlice";
+import { FormForEditItem } from "./FormForEditItem";
 
 const style = {
   position: "absolute",
@@ -23,6 +24,7 @@ interface ModalPopupProps {
 export const ModalPopup: React.FC<ModalPopupProps> = ({ element }) => {
   const dispath = useAppDispatch();
   const openModal = useAppSelector((state) => state.openModalSlice.openModal);
+  const component = useAppSelector((state) => state.openModalSlice.component);
 
   return (
     <Modal
@@ -31,7 +33,7 @@ export const ModalPopup: React.FC<ModalPopupProps> = ({ element }) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={style}>{element}</Box>
+      <Box sx={style}>{component === "edit" ? <FormForEditItem/> : element} </Box>
     </Modal>
   );
 };

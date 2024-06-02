@@ -16,15 +16,15 @@ export const SkeletonTable: React.FC = () => {
           <TableRow>
             <TableCell align="right">
               {" "}
-              <Skeleton animation="wave" />
+              <Skeleton  animation="wave" height={50}/>
             </TableCell>
             <TableCell align="right">
               {" "}
-              <Skeleton animation="wave" />
+              <Skeleton animation="wave" height={50}/>
             </TableCell>
             <TableCell align="right">
               {" "}
-              <Skeleton animation="wave" />
+              <Skeleton animation="wave" height={50}/>
             </TableCell>
           </TableRow>
         </TableHead>

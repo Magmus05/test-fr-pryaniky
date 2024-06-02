@@ -10,7 +10,7 @@ import { setIsLoggedIn } from "./redux/slices/isLoggedInSlice";
 import { useAppDispatch, useAppSelector } from "./redux/srore";
 import NotificationContainer from "./components/NotificationContainer";
 import createToast from "./hooks/createToast";
-createToast
+import { setisLoading } from "./redux/slices/isLoadingSlice";
 
 function App() {
 
@@ -23,13 +23,14 @@ function App() {
     (state) => state.dataSlice.token
   );
 
+
   React.useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (token) {
       dispath(setToken(token));
       dispath(setIsLoggedIn(true));
-
+      dispath(setisLoading(true));
       getData(token)
         .then((res) => {
 
@@ -37,12 +38,15 @@ function App() {
         })
         .then((res) => {
           dispath(setData(res.data));
+          
         })
         .catch((err) => console.log(err))
         .finally(() => {
-          // setLoading(false);
+          dispath(setisLoading(false));
         });
         
+    }else{
+      navigate("/sign-in", { replace: true });
     }
   }, [dispath, isLoggedIn]);
 

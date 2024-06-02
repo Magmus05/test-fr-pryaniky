@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IData } from "../../types/types";
 
 type dataSliceType = {
@@ -14,20 +14,23 @@ const dataSlice = createSlice({
   name: "data",
   initialState,
   reducers: {
-    setData: (state, action) => {
+    setData: (state, action: PayloadAction<IData[]>) => {
       state.data = action.payload;
     },
-    setToken: (state, action) => {
+    setToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
     },
 
-    setDeleteItemData: (state, action) => {
+    setDeleteItemData: (state, action: PayloadAction<string | undefined>) => {
       console.log(action.payload);
       state.data = state.data.filter((item) => item.id !== action.payload);
     },
 
-    setAddItemData: (state, action) => {
+    setAddItemData: (state, action: PayloadAction<IData>) => {
       state.data.push(action.payload)
+    },
+    setEditItemData: (state, action: PayloadAction<IData>) => {
+      state.data.push(action.payload) ///
     },
   },
 });

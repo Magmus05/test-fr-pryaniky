@@ -10,8 +10,8 @@ import Paper from "@mui/material/Paper";
 import { useAppSelector, useAppDispatch } from "../redux/srore";
 import { SkeletonTable } from "./SkeletonTable";
 import { Box, Button, IconButton, Typography } from "@mui/material";
-import { setLogOut} from "../redux/slices/isLoggedInSlice";
-import { setOpenModal } from "../redux/slices/openModalSlice";
+import { setLogOut } from "../redux/slices/isLoggedInSlice";
+import { setOpenModal, setOpenModalEdit } from "../redux/slices/openModalSlice";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { setDeleteItemData } from "../redux/slices/dataSlice";
 import AddIcon from "@mui/icons-material/Add";
@@ -19,6 +19,11 @@ import { styled } from "@mui/system";
 import { ModalPopup } from "./ModalPopup";
 import { FormForAddItem } from "./FormForAddItem";
 import EditIcon from "@mui/icons-material/Edit";
+import { removeDataItem } from "../utils/MainApi";
+import createToast from "../hooks/createToast";
+import { setisLoading } from "../redux/slices/isLoadingSlice";
+import { SkeletonButtonAdd } from "./SkeletonButtonAdd";
+// import LinearProgress from "@mui/material/LinearProgress";
 
 const RoundButton = styled(Button)({
   borderRadius: "50%",
@@ -35,9 +40,50 @@ export const Main: React.FC = () => {
   const dispath = useAppDispatch();
   const navigate = useNavigate();
   console.log(data);
+  const token = useAppSelector((state) => state.dataSlice.token);
+  const isLoading = useAppSelector((state) => state.isLoadingSlice.isLoading);
+
+  const handleRemoveItem = (id: string | undefined) => {
+    dispath(setisLoading(true));
+    console.log(id);
+    
+    removeDataItem({ token: token, id: id })
+      .then((res) => {
+        console.log(res.data);
+        
+        if (res.data.error_code === 0) {
+          dispath(setDeleteItemData(id));
+          createToast("success", "Документ успешно удалён");
+        } else {
+          createToast("error", `Ошибка: ${res.data.error_message}`);
+        }
+      })
+      .catch((err) => {
+        createToast("error", `Ошибка: ${err.message}`);
+      })
+      .finally(() => dispath(setisLoading(false)));
+  };
+
+  const handleEditDataItem = (id: string | undefined) => {
+    const item = data.find((item) => item.id === id);
+    dispath(
+      setOpenModalEdit({ openModal: true, component: "edit", item: item })
+    );
+  };
 
   return (
     <>
+      {/* <Box
+        sx={{
+          width: "100%",
+          position: "absolute",
+          top: "0",
+          left: "0",
+          height: "7px",
+        }}
+      >
+        <LinearProgress sx={{ height: "7px" }} />
+      </Box> */}
       <Box
         sx={{ display: "flex", justifyContent: "right", marginBottom: "20px" }}
       >
@@ -51,7 +97,7 @@ export const Main: React.FC = () => {
           Выйти
         </Button>
       </Box>
-      {data.length === 0 ? (
+      {data.length === 0 || isLoading ? (
         <SkeletonTable />
       ) : (
         <TableContainer component={Paper}>
@@ -70,7 +116,7 @@ export const Main: React.FC = () => {
                       sx={{
                         display: "flex",
                         alignItems: "center",
-                        justifyContent:"space-between"
+                        justifyContent: "space-between",
                       }}
                     >
                       <Box
@@ -84,7 +130,7 @@ export const Main: React.FC = () => {
                           aria-label="delete"
                           size="small"
                           color="primary"
-                          onClick={() => dispath(setDeleteItemData(cell.id))}
+                          onClick={() => handleRemoveItem(cell.id)}
                         >
                           <DeleteIcon />
                         </IconButton>
@@ -92,8 +138,7 @@ export const Main: React.FC = () => {
                           color="primary"
                           aria-label="редактировать"
                           size="small"
-                          onClick={() => console.log("vvvv")}
-                         
+                          onClick={() => handleEditDataItem(cell.id)}
                         >
                           <EditIcon />
                         </IconButton>
@@ -194,23 +239,26 @@ export const Main: React.FC = () => {
           </Table>
         </TableContainer>
       )}
-
-      <Box
-        padding={1}
-        display={"flex"}
-        justifyContent={"start"}
-        alignItems={"center"}
-        gap={0.5}
-      >
-        Добавить документ
-        <RoundButton
-          variant="contained"
-          color="primary"
-          onClick={() => dispath(setOpenModal(true))}
+      {isLoading ? (
+        <SkeletonButtonAdd />
+      ) : (
+        <Box
+          padding={1}
+          display={"flex"}
+          justifyContent={"start"}
+          alignItems={"center"}
+          gap={0.5}
         >
-          <AddIcon />
-        </RoundButton>
-      </Box>
+          Добавить документ
+          <RoundButton
+            variant="contained"
+            color="primary"
+            onClick={() => dispath(setOpenModal(true))}
+          >
+            <AddIcon />
+          </RoundButton>
+        </Box>
+      )}
       <ModalPopup element={<FormForAddItem />}></ModalPopup>
     </>
   );

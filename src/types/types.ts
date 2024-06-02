@@ -19,3 +19,10 @@ export interface IinfotooltipSlice {
   title: string;
   name: string;
 }
+
+export interface InputsFormType extends Omit<IData, "id">  {
+}
+
+export interface IEditData extends IAddData  {
+	id:string | undefined,
+}

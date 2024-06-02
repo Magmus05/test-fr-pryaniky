@@ -1,10 +1,12 @@
-// import axios from "axios";
-import {IAddData} from "../types/types"
+import axios from "axios";
+import { IAddData, IEditData } from "../types/types";
 
 const host = "https://test.v5.pryaniky.com";
 const urlLogin = "/ru/data/v3/testmethods/docs/login";
 const urlGetData = "/ru/data/v3/testmethods/docs/userdocs/get";
-const urlAddData = "/ru/data/v3/testmethods/docs/userdocs/create"
+const urlAddData = "/ru/data/v3/testmethods/docs/userdocs/create";
+const urlRemoveData = "/ru/data/v3/testmethods/docs/userdocs/delete/";
+const urlEditData = "/ru/data/v3/testmethods/docs/userdocs/set/";
 
 export const auth = (username: string, password: string) => {
   return fetch(`${host}${urlLogin}`, {
@@ -30,10 +32,8 @@ export const getData = (token: string | null) => {
   }
 };
 
-
-
-export const addData = ({token, data}:IAddData) => {
-  if (token !== null) {
+export const addData = ({ token, data }: IAddData) => {
+  if (token.length > 0) {
     return fetch(`${host}${urlAddData}`, {
       method: "POST",
       headers: {
@@ -45,4 +45,31 @@ export const addData = ({token, data}:IAddData) => {
     });
   }
 };
+type removeDataItemType = {
+  token: string;
+  id: string | undefined;
+};
+export const removeDataItem = ({ token, id }: removeDataItemType) => {  
+  return axios({
+    method: "POST",
+    url: `${host}${urlRemoveData}${id}`,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "x-auth": token,
+    },
+  });
+};
 
+export const editDataItem = ({ token, id, data }: IEditData) => {
+  return axios({
+    method: "POST",
+    url: `${host}${urlEditData}${id}`,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "x-auth": token,
+    },
+    data: data,
+  });
+};

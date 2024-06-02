@@ -5,50 +5,52 @@ import { Button, TextField } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { setOpenModal } from "../redux/slices/openModalSlice";
 import { useAppDispatch, useAppSelector } from "../redux/srore";
-import { setAddItemData } from "../redux/slices/dataSlice";
-import { addData } from "../utils/MainApi";
 import createToast from "../hooks/createToast";
 import { InputsFormType } from "../types/types";
+import { editDataItem } from "../utils/MainApi";
 import { setisLoading } from "../redux/slices/isLoadingSlice";
 
-export const FormForAddItem: React.FC = () => {
+export const FormForEditItem: React.FC = () => {
   const dispath = useAppDispatch();
 
   const token = useAppSelector((state) => state.dataSlice.token);
 
+  const item = useAppSelector((state) => state.openModalSlice.item);
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
-  } = useForm<InputsFormType>({ mode: "onChange" });
 
-  const onSubmit: SubmitHandler<InputsFormType> = (newItem) => {
+    formState: { errors, isValid },
+  } = useForm<InputsFormType>({
+    mode: "onChange",
+    defaultValues: {
+      companySignatureName: item.companySignatureName,
+      documentName: item.documentName,
+      documentStatus: item.documentStatus,
+      documentType: item.documentStatus,
+      employeeNumber: item.employeeNumber,
+      employeeSignatureName: item.employeeSignatureName,
+    },
+  });
+
+  const onSubmit: SubmitHandler<InputsFormType> = () => {
     dispath(setOpenModal(false));
-    const date = new Date();
-    newItem.companySigDate = date.toISOString();
-    newItem.employeeSigDate = date.toISOString();
     dispath(setisLoading(true));
-    addData({ token: token, data: newItem })
-      ?.then((res) => {
-        return res.json();
-      })
-      .then((obj) => {
-				console.log(obj);
-        if (obj.error_code === 0) {
-          console.log(obj);
-          dispath(setAddItemData(obj.data));
-          createToast("success", "Документ успешно добавлен");
-					dispath(setisLoading(false));
+		console.log("editffffffffffffff");
+    editDataItem({ token: token, id: item.id, data: item })
+      .then((res) => {
+        console.log(res);
+        if (res.data.error_code === 0) {
+					console.log(res.data.data);
+					
+          createToast("success", "Документ успешно изменён");
         } else {
-          createToast("error", `Ошибка: ${obj.error_message}`);
-					dispath(setisLoading(false));
+          createToast("error", `Ошибка: ${res.data.error_message}`);
         }
       })
-      .catch((err) => {
-        createToast("error", "Произошла ошибка");
-        console.log(err);
-				dispath(setisLoading(false));
-      });
+      .catch((err) => createToast("error", `Ошибка: ${err.message}`))
+      .finally(() => dispath(setisLoading(false)));
   };
 
   return (
@@ -63,7 +65,7 @@ export const FormForAddItem: React.FC = () => {
       }}
     >
       <Typography component="h1" variant="h5">
-        Добавить документ
+        Редактировать документ
       </Typography>
 
       <TextField
@@ -220,7 +222,7 @@ export const FormForAddItem: React.FC = () => {
         variant="contained"
         sx={{ mt: 3, mb: 2 }}
       >
-        Добавить
+        Сохранить
       </Button>
     </Box>
   );
