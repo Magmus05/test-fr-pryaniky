@@ -49,7 +49,7 @@ type removeDataItemType = {
   token: string;
   id: string | undefined;
 };
-export const removeDataItem = ({ token, id }: removeDataItemType) => {  
+export const removeDataItem = ({ token, id }: removeDataItemType) => {
   return axios({
     method: "POST",
     url: `${host}${urlRemoveData}${id}`,

@@ -22,7 +22,7 @@ const dataSlice = createSlice({
     },
 
     setDeleteItemData: (state, action: PayloadAction<string | undefined>) => {
-      console.log(action.payload);
+      // console.log(action.payload);
       state.data = state.data.filter((item) => item.id !== action.payload);
     },
 
@@ -30,12 +30,12 @@ const dataSlice = createSlice({
       state.data.push(action.payload)
     },
     setEditItemData: (state, action: PayloadAction<IData>) => {
-      state.data.push(action.payload) ///
+      state.data = state.data.map((item)=> item.id === action.payload.id? action.payload : item)
     },
   },
 });
 
-export const { setData, setDeleteItemData, setAddItemData, setToken } =
+export const { setData, setDeleteItemData, setAddItemData, setToken, setEditItemData } =
   dataSlice.actions;
 
 export default dataSlice.reducer;

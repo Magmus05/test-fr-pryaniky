@@ -9,7 +9,6 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 // import { IsLoggedInContext } from "../context/IsLoggedInContext";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-
 const defaultTheme = createTheme();
 type LoginProp = {
   handleLogin: (userName: string, password: string) => void;
@@ -28,7 +27,6 @@ export const LoginPage: React.FC<LoginProp> = ({ handleLogin }) => {
   } = useForm<InputsFormType>({ mode: "onChange" });
 
   const onSubmit: SubmitHandler<InputsFormType> = (data) => {
-    console.log(data.userName, data.password);
     handleLogin(data.userName, data.password);
   };
 

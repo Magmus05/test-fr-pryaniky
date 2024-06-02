@@ -39,17 +39,16 @@ export const Main: React.FC = () => {
   const data = useAppSelector((state) => state.dataSlice.data);
   const dispath = useAppDispatch();
   const navigate = useNavigate();
-  console.log(data);
   const token = useAppSelector((state) => state.dataSlice.token);
   const isLoading = useAppSelector((state) => state.isLoadingSlice.isLoading);
 
   const handleRemoveItem = (id: string | undefined) => {
     dispath(setisLoading(true));
-    console.log(id);
+    // console.log(id);
     
     removeDataItem({ token: token, id: id })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         
         if (res.data.error_code === 0) {
           dispath(setDeleteItemData(id));

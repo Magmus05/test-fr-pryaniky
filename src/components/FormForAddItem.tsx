@@ -33,21 +33,18 @@ export const FormForAddItem: React.FC = () => {
         return res.json();
       })
       .then((obj) => {
-				console.log(obj);
         if (obj.error_code === 0) {
-          console.log(obj);
           dispath(setAddItemData(obj.data));
           createToast("success", "Документ успешно добавлен");
-					dispath(setisLoading(false));
+          dispath(setisLoading(false));
         } else {
           createToast("error", `Ошибка: ${obj.error_message}`);
-					dispath(setisLoading(false));
+          dispath(setisLoading(false));
         }
       })
       .catch((err) => {
-        createToast("error", "Произошла ошибка");
-        console.log(err);
-				dispath(setisLoading(false));
+        createToast("error", `Произошла ошибка: ${err.message}`);
+        dispath(setisLoading(false));
       });
   };
 

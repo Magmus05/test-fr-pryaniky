@@ -16,9 +16,9 @@ function App() {
 
   const navigate = useNavigate();
   const dispath = useAppDispatch();
-  const isLoggedIn = useAppSelector(
-    (state) => state.isLoggedInSlice.isLoggedIn
-  );
+  // const isLoggedIn = useAppSelector(
+  //   (state) => state.isLoggedInSlice.isLoggedIn
+  // );
   const token = useAppSelector(
     (state) => state.dataSlice.token
   );
@@ -38,9 +38,9 @@ function App() {
         })
         .then((res) => {
           dispath(setData(res.data));
-          
+          createToast("success", "Данные успешно получены.")
         })
-        .catch((err) => console.log(err))
+        .catch((err) => createToast("error", `Произошла ошибка: ${err.message}`))
         .finally(() => {
           dispath(setisLoading(false));
         });
@@ -48,17 +48,17 @@ function App() {
     }else{
       navigate("/sign-in", { replace: true });
     }
-  }, [dispath, isLoggedIn]);
+  }, []);
 
   const handleLogin = (userName: string, password: string) => {
-    console.log(userName, password);
+
 
     auth(userName, password)
       .then((res) => {
         return res.json();
       })
       .then((res) => {
-        console.log(res.data.token);
+    
         dispath(setIsLoggedIn(true));
         dispath(setToken(res.data.token))
         localStorage.setItem("token", res.data.token);
@@ -67,7 +67,7 @@ function App() {
       })
       .catch((err) => {
         createToast("error", `Произошла ошибка: ${err.message}`)
-        console.log(err)
+      
       
       });
   };

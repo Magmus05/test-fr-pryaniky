@@ -9,6 +9,7 @@ import createToast from "../hooks/createToast";
 import { InputsFormType } from "../types/types";
 import { editDataItem } from "../utils/MainApi";
 import { setisLoading } from "../redux/slices/isLoadingSlice";
+import { setEditItemData } from "../redux/slices/dataSlice";
 
 export const FormForEditItem: React.FC = () => {
   const dispath = useAppDispatch();
@@ -34,23 +35,26 @@ export const FormForEditItem: React.FC = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<InputsFormType> = () => {
+  const onSubmit: SubmitHandler<InputsFormType> = (newItem) => {
     dispath(setOpenModal(false));
     dispath(setisLoading(true));
-		console.log("editffffffffffffff");
-    editDataItem({ token: token, id: item.id, data: item })
+    const obj = newItem;
+    obj.companySigDate = item.companySigDate;
+    obj.employeeSigDate = item.employeeSigDate;
+    obj.id = item.id;
+
+    editDataItem({ token: token, id: item.id, data: obj })
       .then((res) => {
         console.log(res);
         if (res.data.error_code === 0) {
-					console.log(res.data.data);
-					
+          dispath(setEditItemData(res.data.data));
+          dispath(setisLoading(false));
           createToast("success", "Документ успешно изменён");
         } else {
           createToast("error", `Ошибка: ${res.data.error_message}`);
         }
       })
-      .catch((err) => createToast("error", `Ошибка: ${err.message}`))
-      .finally(() => dispath(setisLoading(false)));
+      .catch((err) => createToast("error", `Ошибка: ${err.message}`));
   };
 
   return (

@@ -20,7 +20,7 @@ export interface IinfotooltipSlice {
   name: string;
 }
 
-export interface InputsFormType extends Omit<IData, "id">  {
+export interface InputsFormType extends IData  {
 }
 
 export interface IEditData extends IAddData  {

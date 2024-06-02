@@ -10,7 +10,7 @@ type openModalSliceType={
 const initialState:openModalSliceType = {
   openModal: false,
   component: "",
-  item: {}
+  item: {} as IData
 };
 
 const openModalSlice = createSlice({
@@ -23,8 +23,6 @@ const openModalSlice = createSlice({
       state.component = "";
     },
     setOpenModalEdit: (state, action) => {
-      console.log(action.payload.item);
-      
       state.openModal = action.payload.openModal;
       state.component = action.payload.component;
       state.item = action.payload.item;
