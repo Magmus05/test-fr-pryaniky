@@ -1,10 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IData } from "../../types/types";
 
 type openModalSliceType={
   openModal: boolean,
   component: string,
-  item: IData
+  item: IData | undefined
 }
 
 const initialState:openModalSliceType = {
@@ -18,11 +18,11 @@ const openModalSlice = createSlice({
   initialState,
 
   reducers: {
-    setOpenModal: (state, action) => {
+    setOpenModal: (state, action: PayloadAction<boolean>) => {
       state.openModal = action.payload;
       state.component = "";
     },
-    setOpenModalEdit: (state, action) => {
+    setOpenModalEdit: (state, action: PayloadAction<openModalSliceType>) => {
       state.openModal = action.payload.openModal;
       state.component = action.payload.component;
       state.item = action.payload.item;

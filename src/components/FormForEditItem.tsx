@@ -26,12 +26,12 @@ export const FormForEditItem: React.FC = () => {
   } = useForm<InputsFormType>({
     mode: "onChange",
     defaultValues: {
-      companySignatureName: item.companySignatureName,
-      documentName: item.documentName,
-      documentStatus: item.documentStatus,
-      documentType: item.documentStatus,
-      employeeNumber: item.employeeNumber,
-      employeeSignatureName: item.employeeSignatureName,
+      companySignatureName: item?.companySignatureName,
+      documentName: item?.documentName,
+      documentStatus: item?.documentStatus,
+      documentType: item?.documentStatus,
+      employeeNumber: item?.employeeNumber,
+      employeeSignatureName: item?.employeeSignatureName,
     },
   });
 
@@ -39,11 +39,11 @@ export const FormForEditItem: React.FC = () => {
     dispath(setOpenModal(false));
     dispath(setisLoading(true));
     const obj = newItem;
-    obj.companySigDate = item.companySigDate;
-    obj.employeeSigDate = item.employeeSigDate;
-    obj.id = item.id;
+    obj.companySigDate = item?.companySigDate;
+    obj.employeeSigDate = item?.employeeSigDate;
+    obj.id = item?.id;
 
-    editDataItem({ token: token, id: item.id, data: obj })
+    editDataItem({ token: token, id: item?.id, data: obj })
       .then((res) => {
         console.log(res);
         if (res.data.error_code === 0) {

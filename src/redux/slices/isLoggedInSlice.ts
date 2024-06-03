@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState = {
   isLoggedIn: false,
@@ -10,10 +10,10 @@ const isLoggedInSlice = createSlice({
   initialState,
 
   reducers: {
-    setIsLoggedIn: (state, action) => {
+    setIsLoggedIn: (state, action: PayloadAction<boolean>) => {
       state.isLoggedIn = action.payload;
     },
-    setLogOut: (state, action) => {
+    setLogOut: (state, action: PayloadAction<boolean>) => {
       state.isLoggedIn = action.payload;
       localStorage.removeItem("token");
     },

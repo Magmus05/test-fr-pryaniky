@@ -13,63 +13,57 @@ import createToast from "./hooks/createToast";
 import { setisLoading } from "./redux/slices/isLoadingSlice";
 
 function App() {
-
   const navigate = useNavigate();
   const dispath = useAppDispatch();
   // const isLoggedIn = useAppSelector(
   //   (state) => state.isLoggedInSlice.isLoggedIn
   // );
-  const token = useAppSelector(
-    (state) => state.dataSlice.token
-  );
+  const token = useAppSelector((state) => state.dataSlice.token);
 
-
-  React.useEffect(() => {
-    const token = localStorage.getItem("token");
-
+  const data = (token: string | null) => {
     if (token) {
       dispath(setToken(token));
       dispath(setIsLoggedIn(true));
       dispath(setisLoading(true));
       getData(token)
         .then((res) => {
-
-          return res.json();
+          dispath(setData(res.data.data));
+          createToast("success", "Данные успешно получены.");
         })
-        .then((res) => {
-          dispath(setData(res.data));
-          createToast("success", "Данные успешно получены.")
-        })
-        .catch((err) => createToast("error", `Произошла ошибка: ${err.message}`))
+        .catch((err) =>
+          createToast("error", `Произошла ошибка: ${err.message}`)
+        )
         .finally(() => {
           dispath(setisLoading(false));
         });
-        
-    }else{
+    } else {
       navigate("/sign-in", { replace: true });
     }
+  };
+
+  React.useEffect(() => {
+    data(localStorage.getItem("token"));
   }, []);
 
   const handleLogin = (userName: string, password: string) => {
-
-
     auth(userName, password)
       .then((res) => {
         return res.json();
       })
       .then((res) => {
-    
         dispath(setIsLoggedIn(true));
-        dispath(setToken(res.data.token))
+        dispath(setToken(res.data.token));
         localStorage.setItem("token", res.data.token);
         navigate("/", { replace: true });
-        createToast("success", "Вы успешно залогинилось")
+        createToast("success", "Вы успешно залогинились");
+        data(res.data.token);
       })
       .catch((err) => {
-        createToast("error", `Произошла ошибка: ${err.message}`)
-      
-      
+        createToast("error", `Произошла ошибка: ${err.message}`);
       });
+    
+      
+    
   };
 
   return (

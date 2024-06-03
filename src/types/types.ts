@@ -1,11 +1,11 @@
 export interface IData {
-	companySigDate:string,
+	companySigDate:string | undefined,
 	companySignatureName:string,
 	documentName:string,
 	documentStatus:string,
 	documentType:string,
 	employeeNumber:string,
-	employeeSigDate:string,
+	employeeSigDate:string | undefined,
 	employeeSignatureName:string,
 	id?:string,
 }

@@ -14,73 +14,27 @@ export const SkeletonTable: React.FC = () => {
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <TableCell align="right">
-              {" "}
-              <Skeleton  animation="wave" height={50}/>
-            </TableCell>
-            <TableCell align="right">
-              {" "}
-              <Skeleton animation="wave" height={50}/>
-            </TableCell>
-            <TableCell align="right">
-              {" "}
-              <Skeleton animation="wave" height={50}/>
-            </TableCell>
+            {[...new Array(3)].map((i) => (
+              <TableCell key={i} align="right">
+                {" "}
+                <Skeleton animation="wave" height={50} />
+              </TableCell>
+            ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-            <TableCell component="th" scope="row">
-              <Skeleton animation="wave" />
-            </TableCell>
-            <TableCell align="right">
-              {" "}
-              <Skeleton animation="wave" />
-            </TableCell>
-            <TableCell align="right">
-              {" "}
-              <Skeleton animation="wave" />
-            </TableCell>
-          </TableRow>
-          <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-            <TableCell component="th" scope="row">
-              <Skeleton animation="wave" />
-            </TableCell>
-            <TableCell align="right">
-              {" "}
-              <Skeleton animation="wave" />
-            </TableCell>
-            <TableCell align="right">
-              {" "}
-              <Skeleton animation="wave" />
-            </TableCell>
-          </TableRow>
-          <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-            <TableCell component="th" scope="row">
-              <Skeleton animation="wave" />
-            </TableCell>
-            <TableCell align="right">
-              {" "}
-              <Skeleton animation="wave" />
-            </TableCell>
-            <TableCell align="right">
-              {" "}
-              <Skeleton animation="wave" />
-            </TableCell>
-          </TableRow>
-          <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-            <TableCell component="th" scope="row">
-              <Skeleton animation="wave" />
-            </TableCell>
-            <TableCell align="right">
-              {" "}
-              <Skeleton animation="wave" />
-            </TableCell>
-            <TableCell align="right">
-              {" "}
-              <Skeleton animation="wave" />
-            </TableCell>
-          </TableRow>
+          {[...new Array(8)].map((i) => (
+            <TableRow
+              key={i}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              {[...new Array(3)].map((i) => (
+                <TableCell key={i} component="th" scope="row">
+                  <Skeleton animation="wave" />
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>

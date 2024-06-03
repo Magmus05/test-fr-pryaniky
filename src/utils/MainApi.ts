@@ -19,17 +19,16 @@ export const auth = (username: string, password: string) => {
   });
 };
 
-export const getData = (token: string | null) => {
-  if (token !== null) {
-    return fetch(`${host}${urlGetData}`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "x-auth": token,
-      },
-    });
-  }
+export const getData = (token: string) => {
+  return axios({
+    method: "GET",
+    url: `${host}${urlGetData}`,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "x-auth": token,
+    },
+  });
 };
 
 export const addData = ({ token, data }: IAddData) => {
