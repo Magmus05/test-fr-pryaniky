@@ -8,22 +8,23 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useAppSelector, useAppDispatch } from "../redux/srore";
-import { SkeletonTable } from "./SkeletonTable";
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import { SkeletonTable } from "../components/SkeletonTable";
+import { Box, Button, Typography } from "@mui/material";
 import { setLogOut } from "../redux/slices/isLoggedInSlice";
 import { setOpenModal, setOpenModalEdit } from "../redux/slices/openModalSlice";
-import DeleteIcon from "@mui/icons-material/Delete";
+
 import { setDeleteItemData } from "../redux/slices/dataSlice";
 import AddIcon from "@mui/icons-material/Add";
 import { styled } from "@mui/system";
-import { ModalPopup } from "./ModalPopup";
-import { FormForAddItem } from "./FormForAddItem";
-import EditIcon from "@mui/icons-material/Edit";
+import { ModalPopup } from "../components/ModalPopup";
+import { FormForAddItem } from "../components/FormForAddItem";
+
 import { removeDataItem } from "../utils/MainApi";
 import createToast from "../hooks/createToast";
 import { setisLoading } from "../redux/slices/isLoadingSlice";
-import { SkeletonButtonAdd } from "./SkeletonButtonAdd";
-// import LinearProgress from "@mui/material/LinearProgress";
+import { SkeletonButtonAdd } from "../components/SkeletonButtonAdd";
+
+import { RemoveAndEditButton } from "../components/RemoveAndEditButton";
 
 const RoundButton = styled(Button)({
   borderRadius: "50%",
@@ -45,14 +46,15 @@ export const Main: React.FC = () => {
   const handleRemoveItem = (id: string | undefined) => {
     dispath(setisLoading(true));
     // console.log(id);
-    
+
     removeDataItem({ token: token, id: id })
       .then((res) => {
         // console.log(res.data);
-        
+
         if (res.data.error_code === 0) {
           dispath(setDeleteItemData(id));
           createToast("success", "Документ успешно удалён");
+          dispath(setisLoading(false));
         } else {
           createToast("error", `Ошибка: ${res.data.error_message}`);
         }
@@ -96,10 +98,10 @@ export const Main: React.FC = () => {
           Выйти
         </Button>
       </Box>
-      {data.length === 0 || isLoading ? (
+      {isLoading ? (
         <SkeletonTable />
       ) : (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} style={{ overflowX: "auto" }}>
           <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
             <TableHead>
               <TableRow>
@@ -118,30 +120,11 @@ export const Main: React.FC = () => {
                         justifyContent: "space-between",
                       }}
                     >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                        }}
-                      >
-                        <IconButton
-                          aria-label="delete"
-                          size="small"
-                          color="primary"
-                          onClick={() => handleRemoveItem(cell.id)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                        <IconButton
-                          color="primary"
-                          aria-label="редактировать"
-                          size="small"
-                          onClick={() => handleEditDataItem(cell.id)}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                      </Box>
+                      <RemoveAndEditButton
+                        handleRemoveItem={handleRemoveItem}
+                        handleEditDataItem={handleEditDataItem}
+                        id={cell.id ? cell.id : ""}
+                      />
                       {cell.id}
                     </Box>
                   </TableCell>
@@ -156,7 +139,28 @@ export const Main: React.FC = () => {
                   <TableCell align="center">companySigDate</TableCell>
                   {data.map((cell, i) => (
                     <TableCell key={i} align="right">
-                      {cell.companySigDate}
+                      {cell.companySigDate
+                        ? new Date(cell.companySigDate).toLocaleDateString(
+                            "ru-Ru",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                              timeZone: "Europe/Moscow",
+                            }
+                          )
+                        : null}{" "}
+                      {cell.companySigDate
+                        ? new Date(cell.companySigDate).toLocaleTimeString(
+                            "ru-Ru",
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              second: "2-digit",
+                              timeZone: "Europe/Moscow",
+                            }
+                          )
+                        : null}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -219,7 +223,28 @@ export const Main: React.FC = () => {
                   </TableCell>
                   {data.map((cell, i) => (
                     <TableCell key={i} align="right">
-                      {cell.employeeSigDate}
+                      {cell.employeeSigDate
+                        ? new Date(cell.employeeSigDate).toLocaleDateString(
+                            "ru-Ru",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                              timeZone: "Europe/Moscow",
+                            }
+                          )
+                        : null}{" "}
+                      {cell.employeeSigDate
+                        ? new Date(cell.employeeSigDate).toLocaleTimeString(
+                            "ru-Ru",
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              second: "2-digit",
+                              timeZone: "Europe/Moscow",
+                            }
+                          )
+                        : null}
                     </TableCell>
                   ))}
                 </TableRow>

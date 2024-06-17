@@ -3,7 +3,7 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import "./App.css";
 import { LoginPage } from "./pages/LoginPage";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import { Main } from "./components/Main";
+import { Main } from "./pages/Main";
 import { auth, getData } from "./utils/MainApi";
 import { setData, setToken } from "./redux/slices/dataSlice";
 import { setIsLoggedIn } from "./redux/slices/isLoggedInSlice";
@@ -15,10 +15,16 @@ import { setisLoading } from "./redux/slices/isLoadingSlice";
 function App() {
   const navigate = useNavigate();
   const dispath = useAppDispatch();
-  // const isLoggedIn = useAppSelector(
-  //   (state) => state.isLoggedInSlice.isLoggedIn
-  // );
   const token = useAppSelector((state) => state.dataSlice.token);
+
+  React.useEffect(() => {
+    if (token) {
+      dispath(setToken(token));
+      dispath(setIsLoggedIn(true));
+    }
+
+    data(localStorage.getItem("token"));
+  }, []);
 
   const data = (token: string | null) => {
     if (token) {
@@ -41,10 +47,6 @@ function App() {
     }
   };
 
-  React.useEffect(() => {
-    data(localStorage.getItem("token"));
-  }, []);
-
   const handleLogin = (userName: string, password: string) => {
     auth(userName, password)
       .then((res) => {
@@ -61,18 +63,12 @@ function App() {
       .catch((err) => {
         createToast("error", `Произошла ошибка: ${err.message}`);
       });
-    
-      
-    
   };
 
   return (
     <>
       <Routes>
-        <Route
-          path="/"
-          element={token && <ProtectedRoute element={<Main />} />}
-        />
+        <Route path="/" element={token && <ProtectedRoute element={<Main />} />} />
 
         <Route
           path="/sign-in"

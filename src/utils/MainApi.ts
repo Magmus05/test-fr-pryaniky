@@ -14,6 +14,7 @@ export const auth = (username: string, password: string) => {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      
     },
     body: JSON.stringify({ username: username, password: password }),
   });
@@ -32,7 +33,6 @@ export const getData = (token: string) => {
 };
 
 export const addData = ({ token, data }: IAddData) => {
-  if (token.length > 0) {
     return fetch(`${host}${urlAddData}`, {
       method: "POST",
       headers: {
@@ -42,7 +42,7 @@ export const addData = ({ token, data }: IAddData) => {
       },
       body: JSON.stringify(data),
     });
-  }
+
 };
 type removeDataItemType = {
   token: string;

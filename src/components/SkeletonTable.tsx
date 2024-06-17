@@ -14,7 +14,7 @@ export const SkeletonTable: React.FC = () => {
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            {[...new Array(3)].map((i) => (
+            {[...new Array(3)].map((item, i) => (
               <TableCell key={i} align="right">
                 {" "}
                 <Skeleton animation="wave" height={50} />
@@ -23,12 +23,12 @@ export const SkeletonTable: React.FC = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {[...new Array(8)].map((i) => (
+          {[...new Array(8)].map((item, i) => (
             <TableRow
               key={i}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              {[...new Array(3)].map((i) => (
+              {[...new Array(3)].map((item, i) => (
                 <TableCell key={i} component="th" scope="row">
                   <Skeleton animation="wave" />
                 </TableCell>

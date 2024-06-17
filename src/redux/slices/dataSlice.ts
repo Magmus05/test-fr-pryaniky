@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IData } from "../../types/types";
 
+
 type dataSliceType = {
   data: IData[];
   token: string;

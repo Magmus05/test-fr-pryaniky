@@ -92,7 +92,7 @@ export const FormForEditItem: React.FC = () => {
           required: "Поле companySignatureName обязательно",
           minLength: {
             value: 2,
-            message: "Имя должено быть больше 2 букв",
+            message: "Поле companySignatureName должено быть больше 2 букв",
           },
         })}
         fullWidth
@@ -115,7 +115,7 @@ export const FormForEditItem: React.FC = () => {
           required: "Поле documentName обязательно",
           minLength: {
             value: 2,
-            message: "Имя должено быть больше 2 букв",
+            message: "Поле documentName должено быть больше 2 букв",
           },
         })}
         fullWidth
@@ -137,7 +137,7 @@ export const FormForEditItem: React.FC = () => {
           required: "Поле documentStatus обязательно",
           minLength: {
             value: 2,
-            message: "Имя должено быть больше 2 букв",
+            message: "Поле documentStatus должено быть больше 2 букв",
           },
         })}
         fullWidth
@@ -159,7 +159,7 @@ export const FormForEditItem: React.FC = () => {
           required: "Поле documentType обязательно",
           minLength: {
             value: 2,
-            message: "Имя должено быть больше 2 букв",
+            message: "Поле documentType должено быть больше 2 букв",
           },
         })}
         fullWidth
@@ -181,7 +181,7 @@ export const FormForEditItem: React.FC = () => {
           required: "Поле employeeNumber обязательно",
           minLength: {
             value: 2,
-            message: "Имя должено быть больше 2 букв",
+            message: "Поле employeeNumber должено быть больше 2 букв",
           },
         })}
         fullWidth
@@ -203,7 +203,7 @@ export const FormForEditItem: React.FC = () => {
           required: "Поле employeeSignatureName обязательно",
           minLength: {
             value: 2,
-            message: "Имя должено быть больше 2 букв",
+            message: "Поле employeeSignatureName должено быть больше 2 букв",
           },
         })}
         fullWidth
